@@ -1,30 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import './index.css';
 
-function Square() {
+function Square(props) {
+  const [square, setSquare] = useState(0);
+
   return (
-    <button className="square">
-      {/* TODO */}
+    <button className="square" onClick={() => setSquare({value: 'X'})}>
+      {square.value}
     </button>
   );
 }
 
-// class Square extends React.Component {
-//   render() {
-//     return (
-//       <button className="square">
-//         {/* TODO */}
-//       </button>
-//     );
-//   }
-// }
+
 
 function Board() {
   const status = 'Next player: X';
 
   function renderSquare(i) {
-    return <Square />;
+    return <Square value={i}/>;
   }
 
   return (
@@ -48,6 +42,31 @@ function Board() {
     </div>
   );
 }
+
+
+function Game() {
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board />
+      </div>
+      <div className="game-info">
+        <div>{/* status */}</div>
+        <ol>{/* TODO */}</ol>
+      </div>
+    </div>
+  );
+}
+
+// class Square extends React.Component {
+//   render() {
+//     return (
+//       <button className="square">
+//         {/* TODO */}
+//       </button>
+//     );
+//   }
+// }
 
 // class Board extends React.Component {
 //   renderSquare(i) {
@@ -79,20 +98,6 @@ function Board() {
 //     );
 //   }
 // }
-
-function Game() {
-  return (
-    <div className="game">
-      <div className="game-board">
-        <Board />
-      </div>
-      <div className="game-info">
-        <div>{/* status */}</div>
-        <ol>{/* TODO */}</ol>
-      </div>
-    </div>
-  );
-}
 
 // class Game extends React.Component {
 //   render() {
