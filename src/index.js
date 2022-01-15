@@ -1,3 +1,4 @@
+//import { render } from "@testing-library/react";
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import './index.css';
@@ -18,7 +19,8 @@ function Square(props) {
 function Board() {
   const [game, setGame] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
-  const status = `Next player is: ${xIsNext ? 'X' : 'O'}`;
+  let status
+  
 
   function renderSquare(i) {
     return <Square value={game[i]} onClick={() => handleClick(i)}/>;
@@ -26,10 +28,22 @@ function Board() {
 
   function handleClick(i) {
     const squares = game.slice();
+    if(calculateWinner(game) || game[i]){
+      return;
+    }
     squares[i] = xIsNext ? 'X' : 'O'
     setGame(squares);
     setXIsNext(!xIsNext);
+
   }
+
+  const winner = calculateWinner(game);
+  if(winner){
+    status = `Winner: ${winner}`
+  } else {
+    status = `Next player is: ${xIsNext ? 'X' : 'O'}`;
+  }
+
 
   return (
     <div>
@@ -66,6 +80,26 @@ function Game() {
       </div>
     </div>
   );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
 }
 
 // class Square extends React.Component {
