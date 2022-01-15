@@ -3,24 +3,32 @@ import ReactDOM from "react-dom";
 import './index.css';
 
 function Square(props) {
+  
+
   return (
     <button className="square" onClick={() => props.onClick()}>
       {props.value}
     </button>
+    
   );
+  
 }
 
 
 function Board() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const status = 'Next player: X';
+  const [game, setGame] = useState(Array(9).fill(null));
+  const [xIsNext, setXIsNext] = useState(true);
+  const status = `Next player is: ${xIsNext ? 'X' : 'O'}`;
 
   function renderSquare(i) {
-    return <Square value={squares[i]} onClick={() => handleClick(i)}/>;
+    return <Square value={game[i]} onClick={() => handleClick(i)}/>;
   }
 
-  function handleClick() {
-    console.log('worked');
+  function handleClick(i) {
+    const squares = game.slice();
+    squares[i] = xIsNext ? 'X' : 'O'
+    setGame(squares);
+    setXIsNext(!xIsNext);
   }
 
   return (
