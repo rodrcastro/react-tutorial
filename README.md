@@ -6,12 +6,12 @@ I'll be essentially following the tutorial from the official React website, anyo
 
 ## Steps completed (so far):
 
-- \***\*[X]\*\*** Setup
+- **[X]** Setup
 
 ### Overview
 
 - **[X]** Inspecting the Starter Code
-- **[X]** **EXTRA**: Moved everything from Class components to Function components
+  - **[X]** **EXTRA**: Moved everything from Class components to Function components
 - **[X]** Passing Data through Props
 - **[X]** Making an Interactive Component
 
