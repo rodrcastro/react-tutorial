@@ -16,38 +16,14 @@ function Square(props) {
 }
 
 
-function Board() {
-  const [game, setGame] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
-  let status
+function Board(props) {
   
-
   function renderSquare(i) {
-    return <Square value={game[i]} onClick={() => handleClick(i)}/>;
+    return <Square value={props.game[i]} onClick={() => props.onClick(i)}/>;
   }
-
-  function handleClick(i) {
-    const squares = game.slice();
-    if(calculateWinner(game) || game[i]){
-      return;
-    }
-    squares[i] = xIsNext ? 'X' : 'O'
-    setGame(squares);
-    setXIsNext(!xIsNext);
-
-  }
-
-  const winner = calculateWinner(game);
-  if(winner){
-    status = `Winner: ${winner}`
-  } else {
-    status = `Next player is: ${xIsNext ? 'X' : 'O'}`;
-  }
-
 
   return (
     <div>
-      <div className="status">{status}</div>
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}
@@ -69,14 +45,73 @@ function Board() {
 
 
 function Game() {
+  // Setting state
+  const [history, setHistory] = useState(
+    [{
+      game: Array(9).fill(null)
+    }]
+  );
+  const [xIsNext, setXIsNext] = useState(true);
+  const [stepNumber, setStepNumber] = useState(0);
+
+  // Setting the current state of the game based on the most recent event
+  const current = history[stepNumber];
+  console.log(current);
+
+  // Looping over the history to display past moves as buttons
+  const moves = history.map((step, move) => {
+    const description = move ?
+    `Go to move #${move}` :
+    'Go to game start'
+    // 'move' refers to the current history element index
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    )
+  })
+
+
+  // Calculate Winner and display current match status
+  let status
+
+  const winner = calculateWinner(current.game); // Passed current.game instead of game to be able to display the most recent update
+
+  if(winner){
+    status = `Winner: ${winner}`
+  } else {
+    status = `Next player is: ${xIsNext ? 'X' : 'O'}`;
+  }
+
+  // Setting function handleClick to pass as a prop to the Board component
+  function handleClick(i) {
+    history.slice(0, stepNumber + 1);
+    const squares = current.game.slice();
+    if(calculateWinner(squares) || squares[i]){
+      return;
+    }
+    squares[i] = xIsNext ? 'X' : 'O'
+    setHistory(history.concat([{game: squares}]));
+    setStepNumber(history.length);
+    setXIsNext(!xIsNext);
+
+    // Unlike the array push() method you might be more familiar with, the concat() method doesn’t mutate the original array, so we prefer it.
+  }
+
+  // Setting jumpTo function for the history displayed to the user
+  function jumpTo(step) {
+    setStepNumber(step);
+    setXIsNext((step % 2) === 0);
+  }
+
   return (
     <div className="game">
       <div className="game-board">
-        <Board />
+        <Board game={current.game} onClick={(i) => handleClick(i)} />
       </div>
       <div className="game-info">
-        <div>{/* status */}</div>
-        <ol>{/* TODO */}</ol>
+        <div>{status}</div>
+        <ol>{moves}</ol>
       </div>
     </div>
   );
