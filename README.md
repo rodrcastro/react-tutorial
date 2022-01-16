@@ -25,9 +25,9 @@ I'll be essentially following the tutorial from the official React website, anyo
 
 ### Adding Time Travel
 
-- [] Storing a History of Moves
-- [] Lifting State Up, Again
-- [] Showing the Past Moves
-- [] Picking a Key
-- [] Implementing Time Travel
-- [] Wrapping Up
+- **[X]** Storing a History of Moves
+- **[X]** Lifting State Up, Again
+- **[X]** Showing the Past Moves
+- **[X]** Picking a Key
+- **[X]** Implementing Time Travel
+- **[X]** Wrapping Up
