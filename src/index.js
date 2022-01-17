@@ -4,27 +4,24 @@ import ReactDOM from "react-dom";
 import './index.css';
 
 function Square(props) {
-  
-
   return (
     <button className="square" onClick={() => props.onClick()}>
       {props.value}
     </button>
-    
   );
   
 }
 
 
 function Board(props) {
-  
+
   function renderSquare(i) {
     return <Square value={props.game[i]} onClick={() => props.onClick(i)}/>;
   }
 
   return (
     <div>
-      <div className="board-row">
+      <div className="board-row">        
         {renderSquare(0)}
         {renderSquare(1)}
         {renderSquare(2)}
@@ -45,6 +42,7 @@ function Board(props) {
 
 
 function Game() {
+  
   // Setting state
   const [history, setHistory] = useState(
     [{
@@ -53,24 +51,27 @@ function Game() {
   );
   const [xIsNext, setXIsNext] = useState(true);
   const [stepNumber, setStepNumber] = useState(0);
+  const [coordinates, setCoordinates] = useState([{}]);
+  const [currentIndex, setCurrentIndex] = useState(null);
+  
 
   // Setting the current state of the game based on the most recent event
   const current = history[stepNumber];
-  console.log(current);
-
+  
   // Looping over the history to display past moves as buttons
   const moves = history.map((step, move) => {
     const description = move ?
-    `Go to move #${move}` :
+    `Go to move #${move} - Column ${coordinates[move].col}, Row ${coordinates[move].row}` :
     'Go to game start'
     // 'move' refers to the current history element index
+    
+
     return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
+      <li key={move} >
+        <button onClick={() => jumpTo(move)} style={{fontWeight: move === currentIndex ? 600 : 400}}>{description}</button>
       </li>
     )
   })
-
 
   // Calculate Winner and display current match status
   let status
@@ -85,6 +86,45 @@ function Game() {
 
   // Setting function handleClick to pass as a prop to the Board component
   function handleClick(i) {
+    const coordinates2 = [
+      {
+        col: 1,
+        row: 1
+      },
+      {
+        col: 2,
+        row: 1
+      },
+      {
+        col: 3,
+        row: 1
+      },
+      {
+        col: 1,
+        row: 2
+      },
+      {
+        col: 2,
+        row: 2
+      },
+      {
+        col: 3,
+        row: 2
+      },
+      {
+        col: 1,
+        row: 3
+      },
+      {
+        col: 2,
+        row: 3
+      },
+      {
+        col: 3,
+        row: 3
+      },
+    ]
+
     history.slice(0, stepNumber + 1);
     const squares = current.game.slice();
     if(calculateWinner(squares) || squares[i]){
@@ -94,14 +134,18 @@ function Game() {
     setHistory(history.concat([{game: squares}]));
     setStepNumber(history.length);
     setXIsNext(!xIsNext);
+    
+    setCoordinates(coordinates.concat(coordinates2[i]))
+
 
     // Unlike the array push() method you might be more familiar with, the concat() method doesn’t mutate the original array, so we prefer it.
   }
 
   // Setting jumpTo function for the history displayed to the user
-  function jumpTo(step) {
+  function jumpTo(step, index) {
     setStepNumber(step);
     setXIsNext((step % 2) === 0);
+    setCurrentIndex(step)
   }
 
   return (
