@@ -17,7 +17,8 @@ I'll be essentially following the tutorial from the official React website, anyo
 
 ### Completing the Game
 
-- **[X]** Lifting State Up
+**[X]** Lifting State Up
+
 - **[X]** Why Immutability Is Important
 - **[X]** Function Components
 - **[X]** Taking Turns
